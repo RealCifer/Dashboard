@@ -1,16 +1,10 @@
 import { create } from "zustand";
-
-interface Widget {
-  id: string;
-  title: string;
-  type: string;
-  apiUrl: string;
-  refreshInterval: number;
-}
+import { Widget } from "@/types/widget";
 
 interface DashboardStore {
   widgets: Widget[];
   addWidget: (widget: Widget) => void;
+  removeWidget: (id: string) => void;
 }
 
 export const useDashboardStore = create<DashboardStore>((set) => ({
@@ -18,5 +12,9 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
   addWidget: (widget) =>
     set((state) => ({
       widgets: [...state.widgets, widget],
+    })),
+  removeWidget: (id) =>
+    set((state) => ({
+      widgets: state.widgets.filter((w) => w.id !== id),
     })),
 }));

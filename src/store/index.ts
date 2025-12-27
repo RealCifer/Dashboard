@@ -1,1 +1,1 @@
-export { useDashboardStore } from "./dashboardStore";
+export * from "./dashboardStore";
