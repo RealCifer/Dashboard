@@ -1,4 +1,4 @@
-export type WidgetType = "stock" | "table" | "chart";
+export type WidgetType = "stock" | "chart";
 
 export interface Widget {
   id: string;

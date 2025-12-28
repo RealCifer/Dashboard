@@ -1,32 +1,35 @@
 "use client";
 
+import { useEffect } from "react";
 import { useDashboardStore } from "@/store";
 import StockCard from "./widgets/StockCard";
+import StockChart from "./widgets/StockChart";
 import AddWidgetModal from "./AddWidgetModal";
 
 export default function DashboardGrid() {
-  const widgets = useDashboardStore((state) => state.widgets);
+  const { widgets, loadWidgets } = useDashboardStore();
+
+  useEffect(() => {
+    loadWidgets();
+  }, [loadWidgets]);
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-white">
-          Groww Finance Dashboard
-        </h1>
-        <p className="text-gray-400 mt-1">
-          Track your financial widgets in one place
-        </p>
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {widgets.map((widget) => {
+          if (widget.type === "stock") {
+            return <StockCard key={widget.id} widget={widget} />;
+          }
+
+          if (widget.type === "chart") {
+            return <StockChart key={widget.id} />;
+          }
+
+          return null;
+        })}
       </div>
 
-      {/* Widgets Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {widgets.map((widget) => (
-          <StockCard key={widget.id} widget={widget} />
-        ))}
-
-        <AddWidgetModal />
-      </div>
+      <AddWidgetModal />
     </div>
   );
 }

@@ -7,17 +7,34 @@ export default function AddWidgetModal() {
   const addWidget = useDashboardStore((state) => state.addWidget);
 
   return (
-    <button
-      onClick={() =>
-        addWidget({
-          id: uuidv4(),
-          title: "Stock Price",
-          type: "stock",
-        })
-      }
-      className="flex items-center justify-center border-2 border-dashed border-gray-600 rounded-xl p-6 text-gray-300 hover:border-gray-400 hover:text-white transition"
-    >
-      + Add Widget
-    </button>
+    <div className="flex gap-4">
+      {}
+      <button
+        onClick={() =>
+          addWidget({
+            id: uuidv4(),
+            title: "Stock Price",
+            type: "stock",
+          })
+        }
+        className="border border-dashed border-gray-500 px-4 py-6 rounded text-gray-300 hover:bg-gray-800 transition"
+      >
+        + Add Stock
+      </button>
+
+      {}
+      <button
+        onClick={() =>
+          addWidget({
+            id: uuidv4(),
+            title: "Stock Chart",
+            type: "chart",
+          })
+        }
+        className="border border-dashed border-gray-500 px-4 py-6 rounded text-gray-300 hover:bg-gray-800 transition"
+      >
+        + Add Chart
+      </button>
+    </div>
   );
 }
