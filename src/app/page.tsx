@@ -1,11 +1,6 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
-const DashboardGrid = dynamic(
-  () => import("@/components/DashboardGrid"),
-  { ssr: false }
-);
+import DashboardGrid from "@/components/DashboardGrid";
 
 export default function Home() {
   return (
