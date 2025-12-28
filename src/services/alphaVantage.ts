@@ -8,20 +8,20 @@ export async function fetchStockData(symbol: string) {
 
     const data = await res.json();
 
-    if (!data["Time Series (5min)"]) {
-      console.error("API Error:", data);
+    if (!data || data["Note"] || data["Error Message"]) {
+      console.warn("API Error:", data);
       return [];
     }
 
-    return Object.entries(data["Time Series (5min)"])
-      .slice(0, 20)
-      .map(([time, value]: any) => ({
-        time,
-        price: parseFloat(value["1. open"]),
-      }))
-      .reverse();
+    const timeSeries = data["Time Series (5min)"];
+    if (!timeSeries) return [];
+
+    return Object.entries(timeSeries).map(([time, value]: any) => ({
+      time,
+      price: parseFloat(value["1. open"]),
+    }));
   } catch (err) {
-    console.error(err);
+    console.error("Fetch failed:", err);
     return [];
   }
 }

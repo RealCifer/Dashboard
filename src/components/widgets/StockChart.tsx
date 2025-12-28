@@ -9,17 +9,22 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-interface Props {
-  data: { time: string; price: number }[];
-}
+type StockPoint = {
+  time: string;
+  price: number;
+};
 
-export default function StockChart({ data }: Props) {
+export default function StockChart({ data }: { data: StockPoint[] }) {
   if (!data || data.length === 0) {
-    return <p className="text-gray-400 text-sm">Loading chart...</p>;
+    return (
+      <div className="text-gray-400 text-sm text-center py-6">
+        No chart data available
+      </div>
+    );
   }
 
   return (
-    <div className="h-48 w-full">
+    <div className="w-full h-60">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
           <XAxis dataKey="time" hide />

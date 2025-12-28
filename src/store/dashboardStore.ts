@@ -1,39 +1,43 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
-export interface Widget {
+export type Widget = {
   id: string;
   type: string;
   title: string;
   symbol: string;
-}
+};
 
-interface DashboardStore {
+type DashboardStore = {
   widgets: Widget[];
   addWidget: (widget: Widget) => void;
   removeWidget: (id: string) => void;
   setWidgets: (widgets: Widget[]) => void;
-}
+};
 
-export const useDashboardStore = create<DashboardStore>()(
-  persist(
-    (set) => ({
-      widgets: [],
+const STORAGE_KEY = "groww-dashboard";
 
-      addWidget: (widget) =>
-        set((state) => ({
-          widgets: [...state.widgets, widget],
-        })),
+export const useDashboardStore = create<DashboardStore>((set) => ({
+  widgets:
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]")
+      : [],
 
-      removeWidget: (id) =>
-        set((state) => ({
-          widgets: state.widgets.filter((w) => w.id !== id),
-        })),
-
-      setWidgets: (widgets) => set({ widgets }),
+  addWidget: (widget) =>
+    set((state) => {
+      const updated = [...state.widgets, widget];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      return { widgets: updated };
     }),
-    {
-      name: "dashboard-storage", // localStorage key
-    }
-  )
-);
+
+  removeWidget: (id) =>
+    set((state) => {
+      const updated = state.widgets.filter((w) => w.id !== id);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      return { widgets: updated };
+    }),
+
+  setWidgets: (widgets) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(widgets));
+    return { widgets };
+  },
+}));
